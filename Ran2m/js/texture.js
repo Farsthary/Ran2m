@@ -66,42 +66,47 @@ window.onload = function() {
     }
     
     
-    function generateSamples(amount){
+    function generateSamples(amount, type){
         seeds.length = 0;
         //Random
-//        for( var i=0; i<amount; i++){
-//           var x =  Math.floor(Math.random()*width);
-//           var y =  Math.floor(Math.random()*height);   
-//            
-//           // Get the pixel index
-//            var pixelindex = (y * width + x) * 4;
-//            var radius = MinRadius + Math.floor(Math.random()*(MaxRadius - MinRadius));
-//            
-//            var seed = {
-//                posx:x,
-//                posy:y,
-//                r:radius
-//            }            
-//            seeds.push(seed);            
-//        }
-        
-        //Grid
-         for( var i=0; i<amount; i++){
-             for(var j = 0; j < amount; j++){
-                var x =  i*width/amount; //Math.floor(Math.random()*width);
-                var y =  j*height/amount; //Math.floor(Math.random()*height);   
-            
-                // Get the pixel index
-                 var pixelindex = (y * width + x) * 4;
+        if (type == 'RANDOM'){
+            for( var i=0; i<amount; i++){
+               var x =  Math.floor(Math.random()*width);
+               var y =  Math.floor(Math.random()*height);   
+
+               // Get the pixel index
+                var pixelindex = (y * width + x) * 4;
                 var radius = MinRadius + Math.floor(Math.random()*(MaxRadius - MinRadius));
-            
+
                 var seed = {
                     posx:x,
                     posy:y,
                     r:radius
                 }            
-                seeds.push(seed);    
-             }
+                seeds.push(seed);            
+            }
+        }
+        
+        //Grid
+        if (type == 'GRID'){
+            var sqrAmount = Math.floor(Math.sqrt(amount));
+             for( var i=0; i<sqrAmount; i++){
+                 for(var j = 0; j < sqrAmount; j++){
+                    var x =  i*width/sqrAmount; //Math.floor(Math.random()*width);
+                    var y =  j*height/sqrAmount; //Math.floor(Math.random()*height);   
+
+                    // Get the pixel index
+                    var pixelindex = (y * width + x) * 4;
+                    var radius = MinRadius + Math.floor(Math.random()*(MaxRadius - MinRadius));
+
+                    var seed = {
+                        posx:x,
+                        posy:y,
+                        r:radius
+                    }            
+                    seeds.push(seed);    
+                 }
+            }
         }
     }
  
@@ -112,7 +117,7 @@ window.onload = function() {
         context.clearRect(0, 0, canvas.width, canvas.height);       
         
         clearImage();
-        generateSamples(10);       
+        generateSamples(100, 'RANDOM');       
         
         // Create the image
         createImage();
