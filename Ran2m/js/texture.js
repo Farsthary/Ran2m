@@ -177,22 +177,64 @@ window.onload = function() {
                  }
             }
         }
+        
+        if (type == 'SIMPLE'){
+            var x =  width/2; //Math.floor(Math.random()*width);
+            var y =  height/2; //Math.floor(Math.random()*height);   
+
+            // Get the pixel index
+            var pixelindex = (y * width + x) * 4;
+            var radius = MinRadius + Math.floor(Math.random()*(MaxRadius - MinRadius));
+
+            var seed = {
+                posx:x,
+                posy:y,
+                r:radius
+            }            
+            seeds.push(seed);
+        }
     }
     function rules(r,t,l,b){
-        if (r>0 && t==0 && l == 0 && b==0) return 255;
-        if (r==0 && t>0 && l == 0 && b==0) return 255;
-        if (r==0 && t==0 && l > 0 && b==0) return 255;
-        if (r==0 && t==0 && l == 0 && b>0) return 255;
+        var type = 'MANDALA';
         
-//        if (r>0 && t>0 && l == 0 && b==0) return 255;
-//        if (r>0 && t==0 && l == 0 && b>0) return 255;
-//        if (r==0 && t>0 && l > 0 && b==0) return 255;
-//        if (r==0 && t==0 && l > 0 && b>0) return 255;
-//        
-        if (r>0 && t>0 && l >0 && b==0) return 255;
-        if (r>0 && t==0 && l> 0 && b>0) return 255;
-        if (r>0 && t>0 && l == 0 && b>0) return 255;
-        if (r==0 && t>0 && l > 0 && b>0) return 255;
+        if (type == 'MANDALA'){
+            if (r>0 && t==0 && l == 0 && b==0) return 255;
+            if (r==0 && t>0 && l == 0 && b==0) return 255;
+            if (r==0 && t==0 && l > 0 && b==0) return 255;
+            if (r==0 && t==0 && l == 0 && b>0) return 255;
+
+    //        if (r>0 && t>0 && l == 0 && b==0) return 255;
+    //        if (r>0 && t==0 && l == 0 && b>0) return 255;
+    //        if (r==0 && t>0 && l > 0 && b==0) return 255;
+    //        if (r==0 && t==0 && l > 0 && b>0) return 255;
+    //        
+            if (r>0 && t>0 && l >0 && b==0) return 255;
+            if (r>0 && t==0 && l> 0 && b>0) return 255;
+            if (r>0 && t>0 && l == 0 && b>0) return 255;
+            if (r==0 && t>0 && l > 0 && b>0) return 255;
+        }
+        if (type == 'PULSAR'){   
+            if (r>0 && t>0 && l == 0 && b==0) return 255;
+            if (r>0 && t==0 && l == 0 && b>0) return 255;
+            if (r==0 && t>0 && l > 0 && b==0) return 255;
+            if (r==0 && t==0 && l > 0 && b>0) return 255;
+            
+            if (r>0 && t>0 && l >0 && b==0) return 255;
+            if (r>0 && t==0 && l> 0 && b>0) return 255;
+            if (r>0 && t>0 && l == 0 && b>0) return 255;
+            if (r==0 && t>0 && l > 0 && b>0) return 255;
+        }
+        if (type == 'THING'){
+            if (r>0 && t==0 && l == 0 && b==0) return 255;
+            if (r==0 && t>0 && l == 0 && b==0) return 255;
+            if (r==0 && t==0 && l > 0 && b==0) return 255;
+            if (r==0 && t==0 && l == 0 && b>0) return 255;
+
+            if (r>0 && t>0 && l == 0 && b==0) return 255;
+            if (r>0 && t==0 && l == 0 && b>0) return 255;
+            if (r==0 && t>0 && l > 0 && b==0) return 255;
+            if (r==0 && t==0 && l > 0 && b>0) return 255;               
+        }
         
         else return 0;
     }
@@ -205,7 +247,7 @@ window.onload = function() {
         
         if (tframe == 0){
             clearImage();
-            generateSamples(2, 'RANDOM');   
+            generateSamples(1, 'SIMPLE');   
             
             // Create the image
             createImage();                       
