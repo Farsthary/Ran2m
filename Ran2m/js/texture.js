@@ -179,16 +179,16 @@ window.onload = function() {
         }
     }
     function rules(r,t,l,b){
-//        if (r>0 && t==0 && l == 0 && b==0) return 255;
-//        if (r==0 && t>0 && l == 0 && b==0) return 255;
-//        if (r==0 && t==0 && l > 0 && b==0) return 255;
-//        if (r==0 && t==0 && l == 0 && b>0) return 255;
-//        
-        if (r>0 && t>0 && l == 0 && b==0) return 255;
-        if (r>0 && t==0 && l == 0 && b>0) return 255;
-        if (r==0 && t>0 && l > 0 && b==0) return 255;
-        if (r==0 && t==0 && l > 0 && b>0) return 255;
+        if (r>0 && t==0 && l == 0 && b==0) return 255;
+        if (r==0 && t>0 && l == 0 && b==0) return 255;
+        if (r==0 && t==0 && l > 0 && b==0) return 255;
+        if (r==0 && t==0 && l == 0 && b>0) return 255;
         
+//        if (r>0 && t>0 && l == 0 && b==0) return 255;
+//        if (r>0 && t==0 && l == 0 && b>0) return 255;
+//        if (r==0 && t>0 && l > 0 && b==0) return 255;
+//        if (r==0 && t==0 && l > 0 && b>0) return 255;
+//        
         if (r>0 && t>0 && l >0 && b==0) return 255;
         if (r>0 && t==0 && l> 0 && b>0) return 255;
         if (r>0 && t>0 && l == 0 && b>0) return 255;
@@ -205,7 +205,7 @@ window.onload = function() {
         
         if (tframe == 0){
             clearImage();
-            generateSamples(10, 'RANDOM');   
+            generateSamples(2, 'RANDOM');   
             
             // Create the image
             createImage();                       
