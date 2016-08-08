@@ -25,9 +25,9 @@ window.onload = function() {
     }
     // Create the image
     function createImage() {
-         var r = 255;
-         var g = 255;
-         var b = 255;
+         var r = 0;
+         var g = 0;
+         var b = 0;
         
         // Loop over all of the pixels
         for (var x=0; x<width; x++) {
@@ -52,6 +52,41 @@ window.onload = function() {
             }
         }
     }
+    // Difuse the values in the grid canvas
+    function Diffuse(){
+        var DomainTemp = [];
+        for(var i=0; i<4*width*length; i++){ //initialize the array
+            DomainTemp.push(0);
+        }
+         
+        // Loop over all of the pixels
+        for (var x=1; x<width-1; x++) {
+            for (var y=1; y<height-1; y++) {
+                // Get the pixel index
+                var pixelindex = (y * width + x) * 4;         
+                    
+                var offsetl = (y * width + x-1) * 4; 
+                var offsetr = (y * width + x+1) * 4;
+                var offsett = ((y-1) * width + x) * 4;
+                var offsetb = ((y+1) * width + x) * 4;
+                
+                var sum = 0.25*(imagedata.data[offsetl] + imagedata.data[offsetr] + imagedata.data[offsett] + imagedata.data[offsetb]);
+                
+                DomainTemp[pixelindex] = sum; 
+                DomainTemp[pixelindex+1] = sum; 
+                DomainTemp[pixelindex+2] = sum; 
+                DomainTemp[pixelindex+3] = sum; 
+            }
+        }
+       
+        
+        for (var x=1; x<width-1; x++) {
+            for (var y=1; y<height-1; y++) {
+                // Get the pixel index
+                var pixelindex = (y * width + x) * 4;                   setPixel(pixelindex,DomainTemp[pixelindex],DomainTemp[pixelindex],DomainTemp[pixelindex],255);             
+            }
+        }      
+    }
     
     function clearImage() {        
         // Loop over all of the pixels
@@ -60,12 +95,10 @@ window.onload = function() {
                 // Get the pixel index
                 var pixelindex = (y * width + x) * 4;         
                 // Set the pixel data
-                 setPixel(pixelindex, 255,255,255,255);                 
+                 setPixel(pixelindex, 0,0,0,255);                 
             }
         }
-    }
-    
-    
+    }    
     function generateSamples(amount, type){
         seeds.length = 0;
         //Random
@@ -116,11 +149,14 @@ window.onload = function() {
         window.requestAnimationFrame(main);
         context.clearRect(0, 0, canvas.width, canvas.height);       
         
-        clearImage();
-        generateSamples(100, 'RANDOM');       
-        
-        // Create the image
-        createImage();
+        if (tframe == 0){
+            clearImage();
+            generateSamples(100, 'RANDOM');   
+            
+            // Create the image
+            createImage();                       
+        }    
+        Diffuse();
  
         // Draw the image data to the canvas
         context.putImageData(imagedata, 0, 0);
