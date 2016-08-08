@@ -12,7 +12,7 @@ window.onload = function() {
     var imagedata = context.createImageData(width, height);
     
     //----Data-----------------------------------
-    var MaxRadius = 30;
+    var MaxRadius = 50;
     var MinRadius = 10;
     
     var seeds = [];
@@ -40,7 +40,7 @@ window.onload = function() {
                     var dist = Math.sqrt((x-seed.posx)*(x-seed.posx) + (y-seed.posy)*(y-seed.posy));                       
                     
                     if (dist <= seed.r){
-                        var factor = dist/seed.r;
+                        var factor = 1; //dist/seed.r;
                         r = 255*factor;
                         g = 255*factor;
                         b = 255*factor;
@@ -86,8 +86,44 @@ window.onload = function() {
                 var pixelindex = (y * width + x) * 4;                   setPixel(pixelindex,DomainTemp[pixelindex],DomainTemp[pixelindex],DomainTemp[pixelindex],255);             
             }
         }      
-    }
-    
+    }    
+    function CellExpand(){
+        var DomainTemp = [];
+        for(var i=0; i<4*width*length; i++){ //initialize the array
+            DomainTemp.push(0);
+        }
+         
+        // Loop over all of the pixels
+        for (var x=1; x<width-1; x++) {
+            for (var y=1; y<height-1; y++) {
+                // Get the pixel index
+                var pixelindex = (y * width + x) * 4;         
+                    
+                var offsetl = (y * width + x-1) * 4; 
+                var offsetr = (y * width + x+1) * 4;
+                var offsett = ((y-1) * width + x) * 4;
+                var offsetb = ((y+1) * width + x) * 4;
+                
+                var val = rules(imagedata.data[offsetl],imagedata.data[offsett],imagedata.data[offsetr], imagedata.data[offsetb]);
+                                    
+                if (val>255) val = 255;
+                
+                DomainTemp[pixelindex] = val; 
+                DomainTemp[pixelindex+1] = val; 
+                DomainTemp[pixelindex+2] = val; 
+                DomainTemp[pixelindex+3] = val; 
+            }
+        }
+       
+        
+        for (var x=1; x<width-1; x++) {
+            for (var y=1; y<height-1; y++) {
+                // Get the pixel index
+                var pixelindex = (y * width + x) * 4; 
+                setPixel(pixelindex,DomainTemp[pixelindex],DomainTemp[pixelindex],DomainTemp[pixelindex],255);             
+            }
+        }      
+    }    
     function clearImage() {        
         // Loop over all of the pixels
         for (var x=0; x<width; x++) {
@@ -142,6 +178,24 @@ window.onload = function() {
             }
         }
     }
+    function rules(r,t,l,b){
+//        if (r>0 && t==0 && l == 0 && b==0) return 255;
+//        if (r==0 && t>0 && l == 0 && b==0) return 255;
+//        if (r==0 && t==0 && l > 0 && b==0) return 255;
+//        if (r==0 && t==0 && l == 0 && b>0) return 255;
+//        
+        if (r>0 && t>0 && l == 0 && b==0) return 255;
+        if (r>0 && t==0 && l == 0 && b>0) return 255;
+        if (r==0 && t>0 && l > 0 && b==0) return 255;
+        if (r==0 && t==0 && l > 0 && b>0) return 255;
+        
+        if (r>0 && t>0 && l >0 && b==0) return 255;
+        if (r>0 && t==0 && l> 0 && b>0) return 255;
+        if (r>0 && t>0 && l == 0 && b>0) return 255;
+        if (r==0 && t>0 && l > 0 && b>0) return 255;
+        
+        else return 0;
+    }
  
     // Main loop
     function main(tframe) {
@@ -151,12 +205,12 @@ window.onload = function() {
         
         if (tframe == 0){
             clearImage();
-            generateSamples(100, 'RANDOM');   
+            generateSamples(10, 'RANDOM');   
             
             // Create the image
             createImage();                       
         }    
-        Diffuse();
+        CellExpand();
  
         // Draw the image data to the canvas
         context.putImageData(imagedata, 0, 0);
